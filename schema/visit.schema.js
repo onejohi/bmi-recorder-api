@@ -1,6 +1,11 @@
 const { Types, Schema, model } = require('mongoose');
 
 const visitSchema = new Schema({
+  patient: {
+    type: Types.ObjectId,
+    ref: 'Patient',
+    required: true,
+  },
   date: {
     type: String,
     required: true,

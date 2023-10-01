@@ -5,6 +5,7 @@ const patientFormSchema = new Schema({
     type: String,
     enum: ['underweight', 'overweight', 'normal'],
     required: true,
+    unique: true,
   },
   date: {
     type: String,
