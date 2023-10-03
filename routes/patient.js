@@ -32,7 +32,7 @@ router.post('/register', async (req, res) => {
     firstName,
     lastName,
     dateOfBirth,
-    gender
+    gender,
   });
   const savePatient = await newPatient.save();
 

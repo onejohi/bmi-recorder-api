@@ -26,6 +26,16 @@ const visitSchema = new Schema({
     type: Types.ObjectId,
     ref: 'PatientForm'
   },
+  questions: [
+    {
+      question: { type: String },
+      options: [],
+      answer: { type: String },
+    }
+  ],
+  comment: {
+    type: String,
+  }
 }, {
   collection: 'visits',
   timestamps: true,

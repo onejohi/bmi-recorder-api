@@ -4,10 +4,16 @@ const Visit = require('../schema/visit.schema');
 const PatientForm = require('../schema/patientForm.schema');
 
 router.get('/all', async (req, res) => {
-  const visits = await Visit.find();
+  const visits = await Visit.find().populate('patient').exec();
 
   return res.status(200).json({ ok: true, data: visits });
 });
+
+router.get('/vitals-form/:type', async (req, res) => {
+  const patientForm = await PatientForm.findOne({ formType: req.params.type }).exec();
+
+  return res.status(200).json({ ok: true, data: patientForm })
+})
 
 router.post('/update-vitals', async (req, res) => {
   const { patientId, date, height, weight, bodyMassIndex } = req.body;
