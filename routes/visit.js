@@ -23,7 +23,7 @@ router.post('/update-vitals', async (req, res) => {
   }
 
   if (bodyMassIndex > 0 && bodyMassIndex <= 18) {
-    const form = await PatientForm.findOne({ formType: 'underweight'});
+    const form = await PatientForm.findOne({ formType: 'underweight'}).exec();
     const newVisitation = new Visit({
       patient: new Types.ObjectId(patientId),
       date,
@@ -37,7 +37,7 @@ router.post('/update-vitals', async (req, res) => {
   }
 
   if (bodyMassIndex > 18 && bodyMassIndex <= 25) {
-    const form = await PatientForm.findOne({ formType: 'normal'});
+    const form = await PatientForm.findOne({ formType: 'normal'}).exec();
     const newVisitation = new Visit({
       patient: new Types.ObjectId(patientId),
       date,
@@ -51,7 +51,7 @@ router.post('/update-vitals', async (req, res) => {
   }
 
   if (bodyMassIndex > 25) {
-    const form = await PatientForm.findOne({ formType: 'overweight'});
+    const form = await PatientForm.findOne({ formType: 'overweight'}).exec();
     const newVisitation = new Visit({
       patient: new Types.ObjectId(patientId),
       date,
@@ -63,6 +63,22 @@ router.post('/update-vitals', async (req, res) => {
     const savedVisit = await newVisitation.save();
     return res.status(200).json({ ok: true, data: savedVisit });
   }
+});
+
+router.post('/fill-form/:formId', async (req, res) => {
+  const { formId } = req.params;
+  const { questions } = req.body;
+
+  if (!formId) {
+    return res.status(400).json({ error: 'Form does not exist' });
+  }
+
+  // find visit by ID and update questions
+  const visit = await Visit.findById(formId).exec();
+  visit.questions = questions;
+  const savedVisit = await visit.save();
+
+  return res.status(200).json({ ok: true, data: savedVisit });
 });
 
 module.exports = router;
